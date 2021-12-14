@@ -1,7 +1,21 @@
 const http = require('http'); // -> const http = required ('./http') şeklinde olsaydı local'de ki http.js dosyasına bakardı.
 
 const servet = http.createServer((req, res) => {
-    console.log(req);
+    const url = req.url;
+    if (url === '/') {
+        res.write('<html>');
+        res.write('<head><title>Mesajını Yaz</title></head>');
+        res.write('<body><form action="/message" method="POST"> <input type="text" name="message"> <button type="submit">Yolla</button></input> </form></body>')
+        res.write('</html>');
+        return res.end();
+    }
+    res.setHeader('Content-Type', 'text/html '); // Bu komut header kısmına Content-type text/html olan meta data ekleyerek, içeriğin bir kısmının html olabileceğini işaret eder.
+    // bu header alanı sadece belirli tipleri destekler. aslında browserin anlayacağı typelari destekler.
+    res.write('<html>');
+    res.write('<head><title>Benim Sayfam</title></head>');
+    res.write('<body><h1> Nabersiniz ? </h1></body>');
+    res.write('</html>');
+    res.end();
 });
 
 // http. uzantısından sonra http sabiti için oluşturabileceğimiz propertiesleri görüntüleriz. bu kısımda createServer "RequestListener" adında bir argüment alır ve gelen her mesajı execute eder.
