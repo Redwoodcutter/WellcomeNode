@@ -1,13 +1,21 @@
 const http = require('http'); // -> const http = required ('./http') şeklinde olsaydı local'de ki http.js dosyasına bakardı.
+const fs = require('fs'); // sabite fs dedim nedeni filesystem kütüphanesini cağirmiş olmam.
 
 const servet = http.createServer((req, res) => {
     const url = req.url;
+    const method = req.method;
     if (url === '/') {
         res.write('<html>');
         res.write('<head><title>Mesajını Yaz</title></head>');
         res.write('<body><form action="/message" method="POST"> <input type="text" name="message"> <button type="submit">Yolla</button></input> </form></body>')
         res.write('</html>');
         return res.end();
+    }
+    if (url === '/message' && method === 'POST'){ // method post ve url message ise bu if'i geçerli kıll.
+        fs.writeFileSync('message.txt', 'DANDİRİK DATA'); // Message.txt dosyası oluşturarak içerisine dandirik data yazması talebi. 
+        res.statusCode = 302; // redirection status kodu
+        res.setHeader('Location', '/');
+        return res.end(); // return çünkü aşağıdaki kod blogundan devam etmek istiyoruz.
     }
     res.setHeader('Content-Type', 'text/html '); // Bu komut header kısmına Content-type text/html olan meta data ekleyerek, içeriğin bir kısmının html olabileceğini işaret eder.
     // bu header alanı sadece belirli tipleri destekler. aslında browserin anlayacağı typelari destekler.
